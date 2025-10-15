@@ -1,0 +1,110 @@
+[package]
+name = "a-hex-befalls"
+version = "0.1.0"
+edition = "2024"
+readme = "README.md"
+repository = "https://github.com/elijahimmer/a-hex-befalls"
+license = "Apache-2.0"
+
+[dependencies]
+# TODO: Update accesskit when bevy does.
+accesskit = { version = "0.18", features = ["enumn", "serde"] }
+bevy_ecs_tilemap = { version = "0.16", features = ["atlas"] }
+const_format = "0.2"
+directories = "6"
+rand = { version = "0.9", features = ["log"] }
+ron = "0.10"
+serde = { version = "1", features = ["serde_derive", "alloc"] }
+getrandom = { version = "0.3", features = ["wasm_js"] }
+thiserror = "2"
+wyrand = { version = "0.3", features = ["serde1"] }
+blake3 = { version = "1.8", features = [ "pure" ] }
+chrono = { version = "0.4", features = ["serde"], optional = true}
+bevy_ui_text_input = "0.5"
+radsort = "0.1"
+rusqlite = { version = "0.37.0", features = ["modern_sqlite", "bundled", "rusqlite-macros", "chrono", "backup"], optional = true }
+strum = { version = "0.27", features = ["derive", "phf"] }
+log = { version = "0.4", features = ["max_level_debug", "release_max_level_warn"] }
+
+[dependencies.bevy]
+version = "0.16"
+default-features = false
+features = [
+  # Uncomment and add more as needed.
+  #"animation",
+  "async_executor",
+  "bevy_asset",
+  "bevy_audio",
+  #"bevy_color",
+  "bevy_core_pipeline",
+  "bevy_gilrs",
+  #"bevy_gizmos",
+  #"bevy_gltf",
+  #"bevy_input_focus",
+  "bevy_log",
+  #"bevy_mesh_picking_backend",
+  #"bevy_pbr",
+  "bevy_picking",
+  "bevy_render",
+  #"bevy_scene",
+  "bevy_sprite",
+  "bevy_sprite_picking_backend",
+  "bevy_state",
+  "bevy_text",
+  "bevy_ui",
+  "bevy_ui_picking_backend",
+  "bevy_window",
+  "bevy_winit",
+  #"custom_cursor",
+  "default_font",
+  #"hdr",
+  "multi_threaded",
+  "png",
+  #"smaa_luts",
+  "std",
+  "serialize",
+  "sysinfo_plugin",
+  #"tonemapping_luts",
+  #"vorbis",
+  "webgl2",
+  "x11",
+]
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.wasm-release]
+inherits = "release"
+opt-level = "z"
+strip = "symbols"
+
+[profile.wasm-release.package."*"]
+opt-level = "z"
+strip = "symbols"
+
+[profile.wayland]
+inherits = "dev"
+
+[profile.wasm]
+inherits = "dev"
+
+[profile.op_monsters]
+inherits = "release"
+
+[features]
+default = ["sqlite"]
+op_monsters = []
+# sqlite uses chrono to get timestamps for backups
+sqlite = ["dep:rusqlite", "dep:chrono"]
+debug = [
+  "bevy/bevy_dev_tools",
+  "bevy/debug_glam_assert",
+]
+dev = [
+  "bevy/dynamic_linking",
+  "bevy/file_watcher",
+]
+
